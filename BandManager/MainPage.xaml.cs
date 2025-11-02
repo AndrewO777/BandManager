@@ -63,6 +63,7 @@ public partial class MainPage : ContentPage
             if (randomWeight <= cumulativeWeight)
             {
                 _recommendedSong = ws.Song;
+                PlayedSwitch.IsToggled = false;
                 break;
             }
         }
@@ -94,7 +95,7 @@ public partial class MainPage : ContentPage
         if (_recommendedSong == null)
             return;
         
-        if (PlayedCheckBox.IsChecked)
+        if (PlayedSwitch.IsToggled)
         {
             _recommendedSong.PlayCount++;
             _recommendedSong.LastPlayed = DateTime.Now;

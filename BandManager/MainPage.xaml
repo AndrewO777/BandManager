@@ -18,12 +18,13 @@
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Song title and band name"/>
-            <Label
-                Text="Played?"/>
-            <CheckBox
-                x:Name="PlayedCheckBox"
-                HorizontalOptions="Start"
-                Margin="0"/>
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Label
+                    Text="Played?"
+                    VerticalOptions="Center"/>
+                <Switch
+                    x:Name="PlayedSwitch"/>
+            </HorizontalStackLayout>
             <Label
                 x:Name="RatingValueLbl"
                 Text="Rating: 1"/>
@@ -38,8 +39,6 @@
                 Clicked="OnUpdateClicked"
                 HorizontalOptions="Fill"/>
         </VerticalStackLayout>
-        <Grid>
-            <controls:LoadingSpinner x:Name="LoadingSpinner"/>
-        </Grid>
+        <controls:LoadingSpinner x:Name="LoadingSpinner" IsEnabled="false" InputTransparent="true"/>
     </Grid>
 </ContentPage>
