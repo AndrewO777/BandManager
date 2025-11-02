@@ -1,12 +1,13 @@
-﻿using BandManager.Controls;
+﻿using Android.App;
+using BandManager.Controls;
 using BandManager.Models;
 
 namespace BandManager;
 
 public partial class MainPage : ContentPage
 {
-    private List<LearnedSong> songs = new List<LearnedSong>();
-    private LearnedSong recommendedSong;
+    private List<LearnedSong> _songs = new List<LearnedSong>();
+    private LearnedSong? _recommendedSong;
 
     public MainPage()
     {
@@ -19,29 +20,23 @@ public partial class MainPage : ContentPage
         LoadingSpinner.IsVisible = true;
         try
         {
-            //Get songs from api here
-            //Temp data for testing
-            recommendedSong = new LearnedSong()
-            {
-                id = 0,
-                SongName = "Test Song",
-                BandName = "Test Band",
-                CurrentConfidence = 75,
-                LastPlayed = DateTime.Now.AddDays(-10),
-                PlayCount = 5
-            };
+            _songs = RestService.GetSongsAsync().Result;
             CalculateSong();
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             throw;
-        } 
+        }
+        finally
+        {
+            LoadingSpinner.IsVisible = false;
+        }
     }
     
     private void CalculateSong()
     {
-        int len = songs.Count;
+        int len = _songs.Count;
         // No songs so return
         if (len == 0)
             return;
@@ -50,12 +45,10 @@ public partial class MainPage : ContentPage
         while (len > 1)
         {
             int k = Random.Shared.Next(len--);
-            LearnedSong temp = songs[k];
-            songs[len] = songs[k];
-            songs[k] = temp;
+            (_songs[len],_songs[k]) = (_songs[k], _songs[len]);
         }
         
-        var weightedSongs = songs.Select(song => new
+        var weightedSongs = _songs.Select(song => new
         {
             Song = song,
             Weight = CalculateWeight(song)
@@ -69,13 +62,13 @@ public partial class MainPage : ContentPage
             cumulativeWeight += ws.Weight;
             if (randomWeight <= cumulativeWeight)
             {
-                recommendedSong = ws.Song;
+                _recommendedSong = ws.Song;
                 break;
             }
         }
-        SongLbl.Text = recommendedSong.SongName + ", " + recommendedSong.BandName;
-        ConfidenceSlider.Value = recommendedSong.CurrentConfidence;
-        RatingValueLbl.Text = "Rating: " + recommendedSong.CurrentConfidence;
+        SongLbl.Text = _recommendedSong.SongName + ", " + _recommendedSong.BandName;
+        ConfidenceSlider.Value = _recommendedSong.CurrentConfidence;
+        RatingValueLbl.Text = "Rating: " + _recommendedSong.CurrentConfidence;
     }
 
     private double CalculateWeight(LearnedSong song)
@@ -88,18 +81,18 @@ public partial class MainPage : ContentPage
     private void OnNewSongClicked(object sender, EventArgs e)
     {
         CalculateSong();
-        SongLbl.Text = recommendedSong.SongName + ", " + recommendedSong.BandName;
     }
 
     private void OnUpdateClicked(object sender, EventArgs e)
     {
         if (PlayedCheckBox.IsChecked)
         {
-            recommendedSong.PlayCount++;
-            recommendedSong.LastPlayed = DateTime.Now;
+            _recommendedSong.PlayCount++;
+            _recommendedSong.LastPlayed = DateTime.Now;
         }
 
-        recommendedSong.CurrentConfidence = (byte)ConfidenceSlider.Value;
+        _recommendedSong.CurrentConfidence = (byte)ConfidenceSlider.Value;
+        RestService.UpdateSong(_recommendedSong);
         //Update song in database here via api
     }
     
@@ -108,15 +101,4 @@ public partial class MainPage : ContentPage
         ConfidenceSlider.Value = Math.Round(e.NewValue);
         RatingValueLbl.Text = "Rating: " + ConfidenceSlider.Value;
     }
-    /*private void OnCounterClicked(object? sender, EventArgs e)
-    {
-        count++;
-
-        if (count == 1)
-            CounterBtn.Text = $"Clicked {count} time";
-        else
-            CounterBtn.Text = $"Clicked {count} times";
-
-        SemanticScreenReader.Announce(CounterBtn.Text);
-    }*/
 }

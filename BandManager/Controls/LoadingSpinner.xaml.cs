@@ -11,5 +11,6 @@ public partial class LoadingSpinner : ContentView
     public LoadingSpinner()
     {
         InitializeComponent();
+        IsVisible = false;
     }
 }
