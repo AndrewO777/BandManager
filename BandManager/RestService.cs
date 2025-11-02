@@ -27,33 +27,34 @@ public class RestService
         Uri uri = new Uri($"{BaseUrl}songs");
         try
         {
-            HttpResponseMessage response = await Client.GetAsync(uri).ConfigureAwait(false);
+            HttpResponseMessage response = await Client.GetAsync(uri);
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
                 songs = JsonSerializer.Deserialize<List<LearnedSong>>(content, SerializerOptions);
             }
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
+            Console.WriteLine(ex);
             throw;
         }
+        
         return songs ?? [];
     }
 
     public static async Task UpdateSong(LearnedSong song)
     {
-        Uri uri = new Uri($"{BaseUrl}songs/{song.id}");
+        Uri uri = new Uri($"{BaseUrl}songs/{song.Id}");
         try
         {
             string json = JsonSerializer.Serialize<LearnedSong>(song, SerializerOptions);
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await Client.PutAsync(uri, content).ConfigureAwait(false);
+            HttpResponseMessage response = await Client.PutAsync(uri, content);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
+            Console.WriteLine(ex);
             throw;
         }
     }

@@ -20,13 +20,13 @@ public partial class MainPage : ContentPage
         LoadingSpinner.IsVisible = true;
         try
         {
-            _songs = RestService.GetSongsAsync().Result;
+            _songs = await RestService.GetSongsAsync();
             CalculateSong();
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
-            throw;
+            Console.WriteLine(ex);
+            await DisplayAlert("Error", ex.Message, "OK");
         }
         finally
         {
@@ -66,9 +66,15 @@ public partial class MainPage : ContentPage
                 break;
             }
         }
+
+        if (_recommendedSong == null)
+        {
+            return;
+        }
+
         SongLbl.Text = _recommendedSong.SongName + ", " + _recommendedSong.BandName;
         ConfidenceSlider.Value = _recommendedSong.CurrentConfidence;
-        RatingValueLbl.Text = "Rating: " + _recommendedSong.CurrentConfidence;
+        RatingValueLbl.Text = "Rating: " + _recommendedSong?.CurrentConfidence;
     }
 
     private double CalculateWeight(LearnedSong song)
@@ -83,8 +89,11 @@ public partial class MainPage : ContentPage
         CalculateSong();
     }
 
-    private void OnUpdateClicked(object sender, EventArgs e)
+    private async void OnUpdateClicked(object sender, EventArgs e)
     {
+        if (_recommendedSong == null)
+            return;
+        
         if (PlayedCheckBox.IsChecked)
         {
             _recommendedSong.PlayCount++;
@@ -92,8 +101,20 @@ public partial class MainPage : ContentPage
         }
 
         _recommendedSong.CurrentConfidence = (byte)ConfidenceSlider.Value;
-        RestService.UpdateSong(_recommendedSong);
-        //Update song in database here via api
+        LoadingSpinner.IsVisible = true;
+        try
+        {
+            await RestService.UpdateSong(_recommendedSong);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            await DisplayAlert("Error", ex.Message, "OK");
+        }
+        finally
+        {
+            LoadingSpinner.IsVisible = false;
+        }
     }
     
     private void OnRateSliderChanged(object sender, ValueChangedEventArgs e)

@@ -8,7 +8,6 @@
             Padding="30,0"
             Spacing="25">
             <Button
-                x:Name="NewSongsBtn"
                 Text="New Song"
                 SemanticProperties.Hint="Generates a new song to practice"
                 Clicked="OnNewSongClicked"
@@ -35,7 +34,6 @@
                 Maximum="100"
                 ValueChanged="OnRateSliderChanged"/>
             <Button
-                x:Name="RateBtn"
                 Text="Update Song"
                 Clicked="OnUpdateClicked"
                 HorizontalOptions="Fill"/>

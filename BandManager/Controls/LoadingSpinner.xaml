@@ -13,6 +13,9 @@
             HorizontalOptions="Center"
             VerticalOptions="Center"
             BackgroundColor="#88000000">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16"/>
+            </Border.StrokeShape>
             <ActivityIndicator IsRunning="true"/>
         </Border>
     </Border>

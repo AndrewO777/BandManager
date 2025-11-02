@@ -1,11 +1,11 @@
 namespace BandManager.Models;
 
-public class LearnedSong
+public record LearnedSong
 {
-    public int id { get; set; }
-    public string SongName { get; set; }
-    public string BandName { get; set; }
-    public ushort PlayCount { get; set; }
-    public byte CurrentConfidence { get; set; }
-    public DateTime LastPlayed { get; set; }
+    public required int Id { get; init; }
+    public required string SongName { get; init; }
+    public required string BandName { get; init; }
+    public required ushort PlayCount { get; set; }
+    public required byte CurrentConfidence { get; set; }
+    public required DateTime LastPlayed { get; set; }
 }
