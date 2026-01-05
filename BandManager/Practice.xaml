@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:BandManager.Controls"
+             x:Class="BandManager.Practice">
+    <ContentPage.Content>
+        
+        <Grid>
+            <VerticalStackLayout
+                Padding="30,0"
+                Spacing="25">
+                <Button
+                    Text="New Song"
+                    SemanticProperties.Hint="Generates a new song to practice"
+                    Clicked="OnNewSongClicked"
+                    HorizontalOptions="Fill"/>
+                <Label
+                    x:Name="SongLbl"
+                    Text="Default"
+                    Style="{StaticResource SubHeadline}"
+                    SemanticProperties.HeadingLevel="Level2"
+                    SemanticProperties.Description="Song title and band name"/>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Label
+                        Text="Played?"
+                        VerticalOptions="Center"/>
+                    <Switch
+                        x:Name="PlayedSwitch"/>
+                </HorizontalStackLayout>
+                <Label
+                    x:Name="RatingValueLbl"
+                    Text="Rating: 1"/>
+                <Slider
+                    x:Name="ConfidenceSlider"
+                    Value="1"
+                    Minimum="1"
+                    Maximum="100"
+                    ValueChanged="OnRateSliderChanged"/>
+                <Button
+                    Text="Update Song"
+                    Clicked="OnUpdateClicked"
+                    HorizontalOptions="Fill"/>
+            </VerticalStackLayout>
+            <controls:LoadingSpinner x:Name="LoadingSpinner" IsEnabled="false" InputTransparent="true"/>
+        </Grid>
+        </ContentPage.Content>
+</ContentPage>

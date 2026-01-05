@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:BandManager.Models"
+             xmlns:local="clr-namespace:BandManager"
+             x:Class="BandManager.Band"
+             x:DataType="local:Band">
+    <ContentPage.Content>
+        <ScrollView>
+            <!-- Temporary concept for band details page. This page will see significant change. -->
+            <VerticalStackLayout Padding="20" Spacing="20">
+               <Border BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource Primary}}" 
+                       StrokeThickness="0"
+                       StrokeShape="RoundRectangle 15"
+                       Padding="20"
+                       Shadow="{Shadow Brush=Black, Offset='0,2', Radius=4, Opacity=0.3}">
+                   <VerticalStackLayout Spacing="15">
+                       <Border StrokeThickness="0"
+                               StrokeShape="RoundRectangle 75"
+                               HeightRequest="150"
+                               WidthRequest="150"
+                               HorizontalOptions="Center"
+                               Padding="0">
+                           <Image Source="{Binding LogoUrl}"
+                                  Aspect="AspectFill"
+                                  HeightRequest="150"
+                                  WidthRequest="150"/>
+                       </Border>
+                       <Button Text="Change Logo"
+                               CornerRadius="10"
+                               Clicked="OnChangeLogoClicked"/>
+                       <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                           <Entry Text="{Binding Name}"
+                                  FontSize="24"
+                                  FontAttributes="Bold"
+                                  HorizontalOptions="FillAndExpand"
+                                  PlaceholderColor="{StaticResource Gray900}"
+                                  Placeholder="Band Name"/>
+                           <Button Text="✎"
+                                   HeightRequest="24"
+                                   WidthRequest="24"
+                                   Clicked="OnEditNameClicked"/>
+                       </HorizontalStackLayout>
+                   </VerticalStackLayout>
+               </Border>
+               <Border BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource Primary}}"
+                       StrokeThickness="0"
+                       StrokeShape="RoundRectangle 15"
+                       Padding="15"
+                       Shadow="{Shadow Brush=Black, Offset='0,2', Radius=4, Opacity=0.3}">
+                   <VerticalStackLayout Spacing="15">
+                       <HorizontalStackLayout Spacing="10">
+                           <Label Text="Band Members"
+                                  FontSize="20"
+                                  FontAttributes="Bold"
+                                  VerticalOptions="Center"
+                                  HorizontalOptions="StartAndExpand"/>
+                           <Button Text="+ Add Member"
+                                   CornerRadius="10"
+                                   Clicked="OnAddMemberClicked"/>
+                       </HorizontalStackLayout>
+                       <CollectionView ItemsSource="{Binding BandMembers}">
+                           <CollectionView.ItemTemplate>
+                               <DataTemplate x:DataType="models:BandMember">
+                                   <Border BackgroundColor="{StaticResource Secondary}"
+                                           StrokeThickness="0"
+                                           StrokeShape="RoundRectangle 10"
+                                           Padding="15"
+                                           Margin="0,5">
+                                       <HorizontalStackLayout Spacing="15">
+                                           <Label Text="{Binding Name}"
+                                                  FontSize="16"
+                                                  VerticalOptions="Center"
+                                                  HorizontalOptions="StartAndExpand"/>
+                                           <Label Text="{Binding Role}"
+                                                  TextColor="{StaticResource Gray600}"
+                                                  FontSize="14"
+                                                  VerticalOptions="Center"/>
+                                           <Button Text="✎"
+                                                   HeightRequest="20"
+                                                   WidthRequest="20"
+                                                   Clicked="OnEditMemberClicked"
+                                                   CommandParameter="{Binding .}"/>
+                                           <Button Text="🗑"
+                                                   HeightRequest="20"
+                                                   WidthRequest="20"
+                                                   Clicked="OnDeleteMemberClicked"
+                                                   CommandParameter="{Binding .}"/>
+                                       </HorizontalStackLayout>
+                                   </Border>
+                               </DataTemplate>
+                           </CollectionView.ItemTemplate>
+                       </CollectionView>
+                   </VerticalStackLayout>
+               </Border>
+           </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

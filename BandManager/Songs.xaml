@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BandManager"
+             xmlns:models="clr-namespace:BandManager.Models"
+             xmlns:controls="clr-namespace:BandManager.Controls"
+             x:Class="BandManager.Songs"
+             x:DataType="local:Songs">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!-- Setting background color due to bug in iOS making "transparent" for this render as black -->
+            <SearchBar x:Name="SearchBar"
+                       Grid.Row="0"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource Primary}}"
+                       Placeholder="Search songs..."
+                       TextChanged="OnSearchBarTextChanged"/>
+                <CollectionView x:Name="SongsCollectionView"
+                                Grid.Row="1"
+                                ItemsSource="{Binding LearnedSongs}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:LearnedSong">
+                            <Frame Padding="10" Margin="5" CornerRadius="5" BorderColor="{StaticResource Gray200}">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="{Binding SongName}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"/>
+                                    <Label Text="{Binding BandName}"
+                                           FontSize="14"
+                                           TextColor="Gray"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            <controls:LoadingSpinner x:Name="LoadingSpinner" IsEnabled="false" InputTransparent="true" Grid.RowSpan="2"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

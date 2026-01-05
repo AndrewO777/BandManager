@@ -1,22 +1,25 @@
-﻿using Android.App;
-using BandManager.Controls;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using BandManager.Models;
 
 namespace BandManager;
 
-public partial class MainPage : ContentPage
+public partial class Practice : ContentPage
 {
-    private List<LearnedSong> _songs = new List<LearnedSong>();
+    private List<LearnedSong> _songs;
     private LearnedSong? _recommendedSong;
-
-    public MainPage()
+    
+    public Practice()
     {
         InitializeComponent();
+        LoadSongsAsync();
     }
 
-    protected override async void OnAppearing()
+    private async void LoadSongsAsync()
     {
-        base.OnAppearing();
         LoadingSpinner.IsVisible = true;
         try
         {
@@ -26,7 +29,7 @@ public partial class MainPage : ContentPage
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            await DisplayAlert("Error", ex.Message, "OK");
+            await DisplayAlertAsync("Error", ex.Message, "OK");
         }
         finally
         {

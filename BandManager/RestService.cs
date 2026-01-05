@@ -8,7 +8,10 @@ public class RestService
 {
     private static readonly HttpClient Client;
     private static readonly JsonSerializerOptions SerializerOptions;
-    private static readonly string BaseUrl = "http://10.0.2.2:8080/";
+    //Android
+    //private static readonly string BaseUrl = "http://10.0.2.2:8080/";
+    //iOS
+    private static readonly string BaseUrl = "http://localhost:8080/";
     
     static RestService()
     {
